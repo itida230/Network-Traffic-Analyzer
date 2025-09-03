@@ -1,0 +1,18 @@
+import pandas as pd
+import sqlite3
+
+def load_data():
+    conn = sqlite3.connect('network.db')
+    df = pd.read_sql_query('SELECT * FROM traffic', conn)
+    conn.close()
+    return df
+
+def detect_suspicious(df):
+    # Example: flag packets over 1000 bytes as suspicious
+    suspicious = df[df['length'] > 1000]
+    return suspicious
+
+def optimize_network(df):
+    # Example: calculate most frequent destinations
+    destinations = df['destination'].value_counts().head(5)
+    return destinations

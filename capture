@@ -1,0 +1,20 @@
+import pyshark
+
+def capture_packets(interface="Wi-Fi", packet_count=50):
+    capture = pyshark.LiveCapture(interface=interface)
+    packets = []
+    print(f"Capturing {packet_count} packets...")
+
+    for packet in capture.sniff_continuously(packet_count=packet_count):
+        try:
+            packets.append({
+                'source': packet.ip.src,
+                'destination': packet.ip.dst,
+                'protocol': packet.transport_layer,
+                'length': int(packet.length),
+                'info': str(packet.highest_layer)
+            })
+        except AttributeError:
+            # Skip packets without IP layer
+            continue
+    return packets

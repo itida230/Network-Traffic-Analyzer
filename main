@@ -1,0 +1,31 @@
+from capture import capture_packets
+from database import init_db, insert_packet
+from analyze import load_data, detect_suspicious, optimize_network
+
+def main():
+    init_db()
+
+    # Capture packets
+    packets = capture_packets(packet_count=50)
+
+    # Insert into database
+    for packet in packets:
+        insert_packet(packet)
+
+    # Analyze
+    df = load_data()
+    print("\n--- All Captured Packets ---")
+    print(df)
+
+    # Detect suspicious activities
+    suspicious = detect_suspicious(df)
+    print("\n--- Suspicious Packets (size > 1000 bytes) ---")
+    print(suspicious)
+
+    # Optimize network
+    destinations = optimize_network(df)
+    print("\n--- Top 5 Frequent Destinations ---")
+    print(destinations)
+
+if __name__ == "__main__":
+    main()
